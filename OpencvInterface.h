@@ -1,11 +1,11 @@
 
 #include <iostream>
-#include <fstream>
 #include <opencv2/core.hpp>
 #include <opencv2/features2d.hpp>
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgproc.hpp>
+#include <opencv2/calib3d.hpp>
 
 using namespace std;
 using namespace cv;
@@ -18,7 +18,7 @@ using namespace cv;
 /// </summary>
 class StitcherApp {
 private:
-	Mat img1, img2, img1_gray, img2_gray;
+	Mat img1, img2, img1_gray, img2_gray, result;
 	Mat descriptor1, descriptor2;
 	Mat H;
 
@@ -40,12 +40,10 @@ private:
 public: 
 	void VisualizeFeatures();
 	void VisualizeMathes();
+	void DisplayResult();
 	void ShowAllImages();// display img1 & img2
 	void Start(); //set the whole pipeline from 
 	StitcherApp(string path1, string path2);
-	class StitchPipeLine {
-
-	};
 };
 
 

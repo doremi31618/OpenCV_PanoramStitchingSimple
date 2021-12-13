@@ -17,7 +17,10 @@ StitcherApp::StitcherApp(string path1, string path2) {
 }
 
 void StitcherApp::Start() {
-
+    getImageFeatures();
+    matchImages();
+    estimateHomography();
+    transformImage();
 }
 
 void StitcherApp::getImageFeatures() {
@@ -46,7 +49,29 @@ void StitcherApp::matchImages() {
 }
 
 void StitcherApp::estimateHomography() {
+    if (MIN_MATCH_COUNT < good_matches.size()) {
+        // get point from good matches 
+        vector<Point2f> img1_points, img2_points;
+        for (int i = 0; i < good_matches.size(); i++) {
+            img1_points.push_back(kp1[good_matches[i].queryIdx].pt);
+            img2_points.push_back(kp2[good_matches[i].trainIdx].pt);
+        }
+        
+        // findHomography : estimate homography
+        this->H = findHomography(img2_points, img1_points, RANSAC);
+    }
+    else {
+        cout << "doesn't have enough matches to estimate homography" << endl;
+    }
+}
 
+void StitcherApp::transformImage() {
+    warpPerspective(img2, result, H, Size(img2.cols * 2, img2.rows));
+
+    //the last step : compose 2 images
+    Mat half = result(Rect(0, 0, img1.cols, img1.rows));//get img1's roi
+    img1.copyTo(half);//replace roi to result
+    DisplayResult();
 }
 
 void StitcherApp::VisualizeFeatures() {
@@ -76,6 +101,12 @@ void StitcherApp::VisualizeMathes() {
 void StitcherApp::ShowAllImages() {
     imshow("img1 src", img1);
     imshow("img2 src", img2);
+    waitKey(0);
+    destroyAllWindows();
+}
+
+void StitcherApp::DisplayResult() {
+    imshow("result", result);
     waitKey(0);
     destroyAllWindows();
 }

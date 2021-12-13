@@ -8,7 +8,7 @@ int main()
     string img1_path = "C:\\Users\\panos\\Desktop\\PanoAWS\\Projects\\PanoDevIntegration\\pic\\img1.JPG";
     string img2_path = "C:\\Users\\panos\\Desktop\\PanoAWS\\Projects\\PanoDevIntegration\\pic\\img2.JPG";
     StitcherApp app(img1_path, img2_path);
-    app.VisualizeMathes();
+    app.Start();
     //app.ShowAllImages();
     return 0;
 }
