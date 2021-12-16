@@ -2,8 +2,31 @@
 //
 #include "OpencvInterface.h"
 
+void testFormulat() {
+    while (true) {
+        float omega = 341;
+        float thigma = 512;
+
+        float point_x = 600;
+        float point_y = 512;
+        cout << "please enter point x" << endl;
+        cin  >> point_x;
+        cout << "please enter point y" << endl;
+        cin >> point_y;
+
+        point_x -= omega;
+        point_y -= thigma;
+
+        const float r_square = 341 * 341 + 512 * 512 + 300 * 300;
+        const float zc = sqrtf(r_square - point_x * point_x - 200 * 200);
+        float final_x = point_x * (300 / zc) + omega;
+        cout << "final_x" << final_x <<endl;
+    }
+    
+}
 int main()
 {
+    //testFormulat();
     //use Default value to init app environment
     string img1_path = "C:\\Users\\panos\\Desktop\\PanoAWS\\Projects\\PanoDevIntegration\\pic\\img1.JPG";
     string img2_path = "C:\\Users\\panos\\Desktop\\PanoAWS\\Projects\\PanoDevIntegration\\pic\\img2.JPG";
