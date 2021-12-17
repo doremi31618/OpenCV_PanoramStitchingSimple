@@ -78,8 +78,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <LibraryPath>C:\OpenCV\build\x64\vc15\lib;$(LibraryPath)</LibraryPath>
-    <IncludePath>C:\OpenCV\build\include\opencv2;C:\OpenCV\build\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\panos\Desktop\PanoAWS\Projects\PanoDevIntegration\ThirdParty;C:\OpenCV\build\x64\vc15\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\OpenCV\build\include\opencv2;C:\OpenCV\build\include;C:\Users\panos\Desktop\PanoAWS\Projects\PanoDevIntegration\ThirdParty;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -143,10 +143,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="EquirectangularContainer.cpp" />
     <ClCompile Include="OpencvInterface.cpp" />
     <ClCompile Include="PanoDevIntegration.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="EquirectangularContainer.h" />
     <ClInclude Include="OpencvInterface.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

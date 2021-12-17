@@ -1,5 +1,6 @@
 
 #include <iostream>
+#include <fstream>
 #include <opencv2/core.hpp>
 #include <opencv2/features2d.hpp>
 #include <opencv2/imgcodecs.hpp>
@@ -7,6 +8,8 @@
 #include <opencv2/imgproc.hpp>
 #include <opencv2/calib3d.hpp>
 #include <opencv2/stitching/detail/warpers.hpp>
+#include "ThirdParty/TinyEXIF-master/TinyEXIF.h"
+
 
 using namespace std;
 using namespace cv;
@@ -20,6 +23,7 @@ using namespace cv::detail;
 /// </summary>
 class StitcherApp {
 private:
+	TinyEXIF::EXIFInfo img1_exif, img2_exif;
 	Mat img1, img2, img1_gray, img2_gray, result;
 	Mat descriptor1, descriptor2;
 	Mat H;
@@ -37,41 +41,8 @@ private:
 	void transformImage();
 	Point2f covert_pt(Point2f point, float w, float h, float f);
 	void sphericalWarping(Mat srcImg, Mat& outputImg);
-
-	//some other opencv utilities 
-	// Mat findHomographyAlter(InputArray _points1, InputArray _points2,
-	//	int method, double ransacReprojThreshold, OutputArray _mask,
-		//const int maxIters, const double confidence);
-	Mat eulerAnglesToRotationMatrix(Vec3f& theta)
-	{
-		//reference : https://stackoverflow.com/questions/45761194/how-to-use-opencvs-sphericalwarper
-		// Calculate rotation about x axis
-		Mat R_x = (Mat_<float>(3, 3) <<
-			1, 0, 0,
-			0, cosf(theta[0]), -sinf(theta[0]),
-			0, sinf(theta[0]), cosf(theta[0])
-			);
-
-		// Calculate rotation about y axis
-		Mat R_y = (Mat_<float>(3, 3) <<
-			cosf(theta[1]), 0, sinf(theta[1]),
-			0, 1, 0,
-			-sinf(theta[1]), 0, cosf(theta[1])
-			);
-
-		// Calculate rotation about z axis
-		Mat R_z = (Mat_<float>(3, 3) <<
-			cosf(theta[2]), -sinf(theta[2]), 0,
-			sinf(theta[2]), cosf(theta[2]), 0,
-			0, 0, 1);
-
-
-		// Combined rotation matrix
-		Mat R = R_z * R_y * R_x;
-
-		return R;
-
-	}
+	 
+	
 public: 
 	void VisualizeFeatures();
 	void VisualizeMatches();

@@ -21,9 +21,15 @@
     <ClCompile Include="OpencvInterface.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="EquirectangularContainer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="OpencvInterface.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EquirectangularContainer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

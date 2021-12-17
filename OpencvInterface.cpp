@@ -14,8 +14,28 @@ void StitcherApp::Start() {
 }
 
 StitcherApp::StitcherApp(string path1, string path2) {
-    this->img1 = imread(path1, IMREAD_COLOR);
-    this->img2 = imread(path2, IMREAD_COLOR);
+    img1 = imread(path1, IMREAD_COLOR);
+    img2 = imread(path2, IMREAD_COLOR);
+
+    //read exif data 
+    ifstream istream_img1(path1, ifstream::binary);
+    TinyEXIF::EXIFInfo imageEXIF1(istream_img1);
+    
+    ifstream istream_img2(path2, ifstream::binary);
+    TinyEXIF::EXIFInfo imageEXIF2(istream_img2);
+    if (imageEXIF1.Fields && imageEXIF2.Fields) {
+        std::cout
+            << "Image Description " << imageEXIF2.ImageDescription << "\n"
+            << "Image Resolution " << imageEXIF2.ImageWidth << "x" << imageEXIF2.ImageHeight << " pixels\n"
+            << "Camera Model " << imageEXIF2.Make << " - " << imageEXIF2.Model << "\n"
+            << "Focal Length " << imageEXIF2.FocalLength << " mm" << std::endl;
+        
+        std::cout
+            << "Image Description " << imageEXIF1.ImageDescription << "\n"
+            << "Image Resolution " << imageEXIF1.ImageWidth << "x" << imageEXIF1.ImageHeight << " pixels\n"
+            << "Camera Model " << imageEXIF1.Make << " - " << imageEXIF1.Model << "\n"
+            << "Focal Length " << imageEXIF1.FocalLength << " mm" << std::endl;
+    }
 
     resize(img1, img1, Size(683, 1024));
     resize(img2, img2, Size(683, 1024));
@@ -65,7 +85,7 @@ void StitcherApp::estimateHomography() {
         // which is the transformation of maping img2 plane to img1 plane
         // findHomography 參數意義詳解: https://blog.csdn.net/fengyeer20120/article/details/87798638
         VisualizeMatchesAfterRansac(img1_points, img2_points);
-        this->H = findHomography(img2_points, img1_points, RANSAC, 3, noArray(), 2000, 0.995);
+        this->H = findHomography(img2_points, img1_points, RANSAC, 2, noArray(), 2000, 0.995);
     }
     else {
         std::cout << "doesn't have enough matches to estimate homography" << endl;
