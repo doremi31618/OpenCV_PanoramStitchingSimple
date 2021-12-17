@@ -5,10 +5,9 @@ void StitcherApp::Start() {
     VisualizeFeatures();
 
     matchImages();
-    VisualizeMathes();
+    VisualizeMatches();
     estimateHomography();
     transformImage();
-
     
     sphericalWarping(result, result);
     DisplayResult();
@@ -65,10 +64,11 @@ void StitcherApp::estimateHomography() {
         // this function is use to transform img2 to img1 
         // which is the transformation of maping img2 plane to img1 plane
         // findHomography 參數意義詳解: https://blog.csdn.net/fengyeer20120/article/details/87798638
-        this->H = findHomography(img2_points, img1_points, RANSAC, 1, noArray(), 2000, 0.995);
+        VisualizeMatchesAfterRansac(img1_points, img2_points);
+        this->H = findHomography(img2_points, img1_points, RANSAC, 3, noArray(), 2000, 0.995);
     }
     else {
-    std::cout << "doesn't have enough matches to estimate homography" << endl;
+        std::cout << "doesn't have enough matches to estimate homography" << endl;
     }
 }
 
@@ -109,11 +109,7 @@ void StitcherApp::sphericalWarping(Mat srcImg, Mat& outputImg) {
     int width = outputImg.cols;
     int height = outputImg.rows;
     Mat new_img(height, width, CV_8UC3, Scalar(0, 0, 0));
-    Mat roi = srcImg(Rect(width / 2, 0, 184, height));
-    imshow("debug (top_left.x, top_left.y, 0)", roi);
-    waitKey(0);
-    std::cout <<"width "<< width << " ; height " << height;
-    Mat debug_img(height, width , CV_8UC3, Scalar(0, 0, 0));
+    //Mat debug_img(height, width , CV_8UC3, Scalar(0, 0, 0));
     for (int x = 0; x < width; x++) {
         for (int y = 0; y < height; y++) {
 
@@ -146,13 +142,11 @@ void StitcherApp::sphericalWarping(Mat srcImg, Mat& outputImg) {
                 srcImg.at<Vec3b>(top_left.y + 1, top_left.x + 1) * weight_br;
             
             new_img.at<Vec3b>(y, x) = color;
-            Vec3b debug_color(255*top_left.x/width, 255*top_left.y/height, 0);
-            debug_img.at<Vec3b>(y, x) = debug_color;
+            //Vec3b debug_color(255*top_left.x/width, 255*top_left.y/height, 0);
+            //debug_img.at<Vec3b>(y, x) = debug_color;
             
         }
-        Mat roi = srcImg(Rect(width / 2, 0, 184, height));
         imshow("new img", new_img);//the actual image
-        imshow("debug (top_left.x, top_left.y, 0)", roi);
     }
 
 #else
@@ -171,6 +165,37 @@ void StitcherApp::sphericalWarping(Mat srcImg, Mat& outputImg) {
 
 }
 
+void StitcherApp::VisualizeMatchesAfterRansac(vector<Point2f> img1_points, vector<Point2f> img2_points) {
+    Mat m_fundamental = findFundamentalMat(img2_points, img1_points, m_RANSACStatus, FM_RANSAC);
+    int outlinerCount = 0, inlinerCount = 0;
+    vector<DMatch> m_inlierMatches;
+    vector<Point2f> m_img1_inliner, m_img2_inliner;
+    for (int i = 0; i < m_RANSACStatus.size(); i++) {
+        if (m_RANSACStatus[i] == 0) {
+            outlinerCount++;
+        }
+        else {
+            m_img1_inliner.push_back(img1_points[i]);
+            m_img2_inliner.push_back(img2_points[i]);
+            DMatch new_match(inlinerCount, inlinerCount, good_matches[i].distance);
+            m_inlierMatches.push_back(new_match);
+            inlinerCount++;
+        }
+    }
+    cout << " img1 point size : " << m_img1_inliner.size() <<
+         " img2 point size : " << m_img2_inliner.size() <<
+        " good matches size : " << m_inlierMatches.size() << endl;
+    cout << "total count : " << m_RANSACStatus.size() << " outliner count : " << outlinerCount << endl;
+    Mat img_matches;
+    vector<KeyPoint> new_kp1, new_kp2;
+    KeyPoint::convert(m_img1_inliner, new_kp1);
+    KeyPoint::convert(m_img2_inliner, new_kp2);
+    drawMatches(img1, new_kp1, img2, new_kp2, m_inlierMatches, img_matches);
+    imshow("after ransac matches", img_matches);
+    waitKey(0);
+    destroyAllWindows();
+    
+}
 void StitcherApp::VisualizeFeatures() {
     if (this->kp1.size() == 0 || this->kp2.size() == 0) getImageFeatures();
     //cout << "kp1 count" << kp1.size() << "kp2 count" << kp2.size() << endl;
@@ -183,7 +208,7 @@ void StitcherApp::VisualizeFeatures() {
     destroyAllWindows();
 }
 
-void StitcherApp::VisualizeMathes() {
+void StitcherApp::VisualizeMatches() {
     if (this->kp1.size() == 0 || this->kp2.size() == 0) getImageFeatures();
     if (this->good_matches.size() == 0) matchImages();
 
@@ -192,7 +217,6 @@ void StitcherApp::VisualizeMathes() {
                 Scalar::all(-1), vector<char>(), DrawMatchesFlags::NOT_DRAW_SINGLE_POINTS);
     imshow("img matches", img_matches);
     waitKey(0);
-    destroyAllWindows();
 }
 
 void StitcherApp::ShowAllImages() {

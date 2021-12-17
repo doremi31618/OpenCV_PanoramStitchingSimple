@@ -2,7 +2,7 @@
 //
 #include "OpencvInterface.h"
 
-void testFormulat() {
+void testFormula() {
     while (true) {
         float omega = 341;
         float thigma = 512;
@@ -26,7 +26,7 @@ void testFormulat() {
 }
 int main()
 {
-    //testFormulat();
+    //testFormula();
     //use Default value to init app environment
     string img1_path = "C:\\Users\\panos\\Desktop\\PanoAWS\\Projects\\PanoDevIntegration\\pic\\img1.JPG";
     string img2_path = "C:\\Users\\panos\\Desktop\\PanoAWS\\Projects\\PanoDevIntegration\\pic\\img2.JPG";

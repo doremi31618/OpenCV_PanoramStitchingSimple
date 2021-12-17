@@ -25,6 +25,7 @@ private:
 	Mat H;
 
 	vector<KeyPoint> kp1, kp2;
+	vector<uchar> m_RANSACStatus;
 	const float ratio_thresh = 0.6f;
 	const float MIN_MATCH_COUNT = 10;
 	vector<DMatch> good_matches;
@@ -38,6 +39,9 @@ private:
 	void sphericalWarping(Mat srcImg, Mat& outputImg);
 
 	//some other opencv utilities 
+	// Mat findHomographyAlter(InputArray _points1, InputArray _points2,
+	//	int method, double ransacReprojThreshold, OutputArray _mask,
+		//const int maxIters, const double confidence);
 	Mat eulerAnglesToRotationMatrix(Vec3f& theta)
 	{
 		//reference : https://stackoverflow.com/questions/45761194/how-to-use-opencvs-sphericalwarper
@@ -70,7 +74,9 @@ private:
 	}
 public: 
 	void VisualizeFeatures();
-	void VisualizeMathes();
+	void VisualizeMatches();
+	//call at estimate Homography
+	void VisualizeMatchesAfterRansac(vector<Point2f> img1_points, vector<Point2f> img2_points);
 	void DisplayResult();
 	void ShowAllImages();// display img1 & img2
 	void Start(); //set the whole pipeline from
