@@ -9,7 +9,7 @@
 #include <opencv2/calib3d.hpp>
 #include <opencv2/stitching/detail/warpers.hpp>
 #include "ThirdParty/TinyEXIF-master/TinyEXIF.h"
-
+#include "EquirectangularContainer.h"
 
 using namespace std;
 using namespace cv;
@@ -41,8 +41,8 @@ private:
 	void transformImage();
 	Point2f covert_pt(Point2f point, float w, float h, float f);
 	void sphericalWarping(Mat srcImg, Mat& outputImg);
-	 
-	
+	TinyEXIF::EXIFInfo readEXIF(string);
+	void ShowEquirectangular();
 public: 
 	void VisualizeFeatures();
 	void VisualizeMatches();
@@ -51,7 +51,9 @@ public:
 	void DisplayResult();
 	void ShowAllImages();// display img1 & img2
 	void Start(); //set the whole pipeline from
+	void ReadImage(string, bool);
 	StitcherApp(string path1, string path2);
+	StitcherApp(string path);
 };
 
 

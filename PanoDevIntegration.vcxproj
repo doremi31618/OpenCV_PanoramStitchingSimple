@@ -146,10 +146,14 @@
     <ClCompile Include="EquirectangularContainer.cpp" />
     <ClCompile Include="OpencvInterface.cpp" />
     <ClCompile Include="PanoDevIntegration.cpp" />
+    <ClCompile Include="TinyEXIF.cpp" />
+    <ClCompile Include="tinyxml2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EquirectangularContainer.h" />
     <ClInclude Include="OpencvInterface.h" />
+    <ClInclude Include="TinyEXIF.h" />
+    <ClInclude Include="tinyxml2.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

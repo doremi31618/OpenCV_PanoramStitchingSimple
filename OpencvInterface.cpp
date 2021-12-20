@@ -43,11 +43,26 @@ StitcherApp::StitcherApp(string path1, string path2) {
     cvtColor(this->img1, this->img1_gray, COLOR_BGR2GRAY);
     cvtColor(this->img2, this->img2_gray, COLOR_BGR2GRAY);
 
+
     if (img1.empty() | img2.empty()) {
         std::cout << "Could not open or find the image!\n" << endl;
         std::cout << "Usage: " << path1 <<" ; " << path2 << " <Input image>" << endl;
     }
 }
+
+StitcherApp::StitcherApp(string path) {
+    img1 = imread(path, IMREAD_COLOR);
+    ifstream istream_img1(path, ifstream::binary);
+    TinyEXIF::EXIFInfo imageEXIF1(istream_img1);
+    resize(img1, img1, Size(683, 1024));
+    cvtColor(this->img1, this->img1_gray, COLOR_BGR2GRAY);
+    EquiElement newEqui(imageEXIF1, img1);
+    newEqui.displayEqui();
+}
+void StitcherApp::ShowEquirectangular() {
+    EquiElement single_equi();
+}
+
 void StitcherApp::getImageFeatures() {
     Ptr<SIFT> detector = SIFT::create();
 
@@ -166,9 +181,9 @@ void StitcherApp::sphericalWarping(Mat srcImg, Mat& outputImg) {
             //debug_img.at<Vec3b>(y, x) = debug_color;
             
         }
-        imshow("new img", new_img);//the actual image
+        
     }
-
+    imshow("new img", new_img);//the actual image
 #else
     //reference : https://stackoverflow.com/questions/45761194/how-to-use-opencvs-sphericalwarper
     float scale = 500.0f;
@@ -251,4 +266,49 @@ void StitcherApp::DisplayResult() {
     waitKey(0);
     destroyAllWindows();
 }
+TinyEXIF::EXIFInfo StitcherApp::readEXIF(string path) {
+
+    //read exif file
+    ifstream istream_img1(path, ifstream::binary);
+    TinyEXIF::EXIFInfo imageEXIF1(istream_img1);
+    if (imageEXIF1.Fields) {
+        std::cout
+            << "Image Description " << imageEXIF1.ImageDescription << "\n"
+            << "Image Resolution " << imageEXIF1.ImageWidth << "x" << imageEXIF1.ImageHeight << " pixels\n"
+            << "Camera Model " << imageEXIF1.Make << " - " << imageEXIF1.Model << "\n"
+            << "Focal Length " << imageEXIF1.FocalLength << " mm" << std::endl;
+    }
+    return imageEXIF1;
+}
+
+void StitcherApp::ReadImage(string path, bool display=false) {
+    //range from 0~1
+    float working_scale = 1;
+    Mat img_src, img_resize, img_gray;
+    TinyEXIF::EXIFInfo exif;
+
+    //read and Init
+    exif = readEXIF(path);
+    img_src = imread(path, IMREAD_COLOR);
+    resize(img_src, img_resize, Size((int)(img_src.cols * working_scale), (int)(img_src.cols * working_scale)));
+    cvtColor(img_src, img_gray, COLOR_BGR2GRAY);
+
+    if (img_src.empty()) {
+        std::cout << "Could not open or find the image!\n" << endl;
+        std::cout << "Usage: " << path << " ; " <<  endl;
+    }
+
+    if (display) {
+        imshow("src", img_src);
+        imshow("resize", img_resize);
+        imshow("gray", img_gray);
+
+        waitKey(0);
+
+        destroyWindow("src");
+        destroyWindow("resize");
+        destroyWindow("gray");
+    }
+}
+
 
