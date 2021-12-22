@@ -10,7 +10,7 @@
 
 #ifndef EQUIRECTANGULAR
 #define EQUIRECTANGULAR
-
+#define PI 3.1415926
 
 using namespace cv;
 using namespace std;
@@ -27,6 +27,7 @@ private:
 	Rect2f transform;
 	Size imgSize;
 	Point2f convert_from_equi_to_src(Point2f);
+	Point2f convert_from_src_to_equi(Point2f);
 	void calculateEqui();
 public:
 	EquiElement(TinyEXIF::EXIFInfo, Mat&);
@@ -38,21 +39,21 @@ public:
 /// <summary>
 /// Define a container for Equirectangular 
 /// </summary>
-//class EquiContainer
-//{
-//private:
-//	Mat img_equirectangular;
-//public:
-//	
-//	EquiContainer(Mat img);
-//	EquiContainer(Mat** img);
-//
-//	void edit_element();
-//	void edit_element_list();
-//	void addImage(Mat img);
-//	void display();
-//	void Init();
-//
-//};
+class EquiContainer
+{
+private:
+	Mat img_equirectangular;
+public:
+	
+	EquiContainer(Mat img);
+	EquiContainer(Mat** img);
+	int getLength();
+	void edit_element();
+	void edit_element_list();
+	void addImage(Mat img);
+	void display();
+	void Init();
+
+};
 
 #endif // !1

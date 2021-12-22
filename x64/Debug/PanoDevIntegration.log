@@ -3,19 +3,6 @@ C:\OpenCV\build\include\opencv2\calib3d.hpp(1,1): warning C4819: The file contai
 C:\Users\panos\Desktop\PanoAWS\Projects\PanoDevIntegration\EquirectangularContainer.cpp(11,22): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 C:\Users\panos\Desktop\PanoAWS\Projects\PanoDevIntegration\EquirectangularContainer.cpp(19,13): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 C:\Users\panos\Desktop\PanoAWS\Projects\PanoDevIntegration\EquirectangularContainer.cpp(20,13): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\panos\Desktop\PanoAWS\Projects\PanoDevIntegration\EquirectangularContainer.cpp(32,13): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-C:\Users\panos\Desktop\PanoAWS\Projects\PanoDevIntegration\EquirectangularContainer.cpp(33,13): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-C:\Users\panos\Desktop\PanoAWS\Projects\PanoDevIntegration\EquirectangularContainer.cpp(44,23): warning C4244: '=': conversion from 'double' to '_Tp', possible loss of data
-          with
-          [
-              _Tp=float
-          ]
-C:\Users\panos\Desktop\PanoAWS\Projects\PanoDevIntegration\EquirectangularContainer.cpp(45,23): warning C4244: '=': conversion from 'double' to '_Tp', possible loss of data
-          with
-          [
-              _Tp=float
-          ]
-C:\Users\panos\Desktop\PanoAWS\Projects\PanoDevIntegration\EquirectangularContainer.cpp(81,29): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\panos\Desktop\PanoAWS\Projects\PanoDevIntegration\EquirectangularContainer.cpp(82,29): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\panos\Desktop\PanoAWS\Projects\PanoDevIntegration\EquirectangularContainer.cpp(83,29): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\panos\Desktop\PanoAWS\Projects\PanoDevIntegration\EquirectangularContainer.cpp(42,41): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\panos\Desktop\PanoAWS\Projects\PanoDevIntegration\EquirectangularContainer.cpp(43,35): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
   PanoDevIntegration.vcxproj -> C:\Users\panos\Desktop\PanoAWS\Projects\PanoDevIntegration\x64\Debug\PanoDevIntegration.exe

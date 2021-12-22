@@ -23,73 +23,42 @@ EquiElement::EquiElement(TinyEXIF::EXIFInfo _exif, Mat& img) : imgSrc(img) {
 
     //default is use imgSrc size
     transform = Rect2f(0, 0, hFov, vFov);
-    imgEqui = Mat(img.rows, img.cols, CV_8UC3, Scalar(0, 0, 0));
+    imgEqui = Mat(720, 1440, CV_8UC3, Scalar(0, 0, 0));
     calculateEqui();
 }
 
-//convert from equi to src
-Point2f EquiElement::convert_from_equi_to_src(Point2f point) {
-    float w = imgEqui.cols;
-    float h = imgEqui.rows;
+Point2f EquiElement::convert_from_src_to_equi(Point2f point) {
+    point.x = point.x - imgSrc.cols / 2; 
+    point.y = (point.y - imgSrc.rows / 2);
 
-    float omega = w / 2;
-    float thigma = h / 2;
+    //if the center of image is not at origin point (0,0) ,
+    //image should rotate first before projection 
+    
+    //compute the angle of 
+    float lon = atan( point.x / focal);
+    float lat = atan( point.y/ sqrt(focal*focal + point.x * point.x) );
+    
+    //assign to equirectangular
+    lon = lon * (imgEqui.cols / 2) / PI + imgEqui.cols / 2;
+    lat = lat * imgEqui.rows / PI + imgEqui.rows / 2;
 
-    // -0.5 ~ 0.5
-    point.x = (point.x - omega) / w; 
-    point.y = -(point.y - thigma) / h;
-
-    //-fov/2 ~ fov/2 
-    Point2f angle;
-    angle.x = point.x * transform.width;
-    angle.y = point.y * transform.height;
-
-    //
-    Point2f final_point;
-    final_point.x = tan(angle.x) * focal + imgEqui.cols/2;
-    final_point.y = -tan(angle.y) * focal + imgEqui.rows/2;
-
-    //cout <<" final_point : "<< final_point << endl;
-    return final_point;
+    return Point2f(lon, lat);
 }
 
 void EquiElement::calculateEqui() {
-    int width = imgEqui.cols;
-    int height = imgEqui.rows;
+    int width = imgSrc.cols;
+    int height = imgSrc.rows;
     for (int x = 0; x < width; x++) {
         for (int y = 0; y < height; y++) {
 
             //step 1 get origin image corresponding coordinate
             Point2f current_pos((float)x, (float)y);
-            //current_pos = convert_pt(current_pos);
-            current_pos = convert_from_equi_to_src(current_pos);
+            current_pos = convert_from_src_to_equi(current_pos);
+            //current_pos = convert_from_equi_to_src(current_pos);
             Point2i top_left((int)current_pos.x, (int)current_pos.y);
-            
-            //step2 check if this point inside the image
-            if ((top_left.x < 0) ||
-                (top_left.y < 0) ||
-                (top_left.x > width - 2) ||
-                (top_left.y > height - 2)) {
-                //cout << "skip";
-                continue;
-            }
 
-            //step3 resampling color - bilinear interpolation
-            float dx = current_pos.x - top_left.x;
-            float dy = current_pos.y - top_left.y;
-
-            float weight_tl = (1.0 - dx) * (1.0 - dy);
-            float weight_tr = dx * (1.0 - dy);
-            float weight_bl = (1.0 - dx) * dy;
-            float weight_br = dx * dy;
-
-            Vec3b color = imgSrc.at<Vec3b>(top_left.y, top_left.x) * weight_tl +
-                imgSrc.at<Vec3b>(top_left.y, top_left.x + 1) * weight_tr +
-                imgSrc.at<Vec3b>(top_left.y + 1, top_left.x) * weight_bl +
-                imgSrc.at<Vec3b>(top_left.y + 1, top_left.x + 1) * weight_br;
-
-            imgEqui.at<Vec3b>(y, x) = color;
-            //imgEqui.at<Vec3b>(y, x) = imgSrc.at<Vec3b>(top_left.y, top_left.x);
+            //imgEqui.at<Vec3b>(y, x) = color;
+            imgEqui.at<Vec3b>(top_left.y, top_left.x) = imgSrc.at<Vec3b>(y, x);
         }
     }
 }
