@@ -1,19 +1,13 @@
 #include <iostream>
-#include <opencv2/core.hpp>
-#include <opencv2/features2d.hpp>
-#include <opencv2/imgcodecs.hpp>
-#include <opencv2/highgui.hpp>
-#include <opencv2/imgproc.hpp>
-#include <opencv2/calib3d.hpp>
-#include <opencv2/stitching/detail/warpers.hpp>
+#include "OpenCV_include.h"
 #include "ThirdParty/TinyEXIF-master/TinyEXIF.h"
+#include "MathUtilities.h"
 
 #ifndef EQUIRECTANGULAR
 #define EQUIRECTANGULAR
-#define PI 3.1415926
 
-using namespace cv;
 using namespace std;
+
 
 class EquiElement {
 private:

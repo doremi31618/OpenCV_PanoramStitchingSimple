@@ -144,13 +144,16 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="EquirectangularContainer.cpp" />
+    <ClCompile Include="MathUtilities.cpp" />
     <ClCompile Include="OpencvInterface.cpp" />
-    <ClCompile Include="PanoDevIntegration.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="TinyEXIF.cpp" />
     <ClCompile Include="tinyxml2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EquirectangularContainer.h" />
+    <ClInclude Include="OpenCV_include.h" />
+    <ClInclude Include="MathUtilities.h" />
     <ClInclude Include="OpencvInterface.h" />
     <ClInclude Include="TinyEXIF.h" />
     <ClInclude Include="tinyxml2.h" />
